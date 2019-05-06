@@ -1,7 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 const helmet = require('helmet');
-const bcrypt = require('bycrptjs');
+const bcrypt = require('bcryptjs');
 
 const server = express();
 
