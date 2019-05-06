@@ -5,6 +5,9 @@ const bcrypt = require('bycrptjs');
 
 const server = express();
 
+const knexConfig = require('./knexfile');
+const db = knex(knexConfig.development);
+
 server.use(express.json());
 server.use(helmet());
 
