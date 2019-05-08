@@ -2,14 +2,28 @@ const express = require('express');
 const knex = require('knex');
 const helmet = require('helmet');
 const bcrypt = require('bcryptjs');
+const session = require('express-session');
 
 const server = express();
+
+const sessionConfig = {
+    name: 'random',
+    secret: 'A Lannister always pay his debts',
+    cookie: {
+        maxAge: 1000 * 60 * 10,
+        secure: true,
+    },
+    httpOnly: true,
+    resave: false,
+    saveUninitialized: false
+}
 
 const knexConfig = require('./knexfile');
 const db = knex(knexConfig.development);
 
 server.use(express.json());
 server.use(helmet());
+server.use(sessionConfig);
 
 server.get('/', (req, res) => {
     console.log(`It's working`)
@@ -33,6 +47,7 @@ server.post('/api/login', (req, res) => {
     Users.findBy({username})
     .first()
     .then(user => {
+        res.session.name = user
         if(user && bycrypt.compareSync(password, user.username)) {
             res.status(201).send('Logged in')
         } else {
